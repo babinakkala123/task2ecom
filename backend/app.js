@@ -26,3 +26,42 @@ const productSchema = new mongoose.Schema({
 const Product = mongoose.model('Product', productSchema);
 
 
+
+app.post('/api/products', async (req, res) => {
+  const { name, price, category, description, image } = req.body;
+
+  if (!name || !price || !category) {
+    return res.status(400).json({ message: 'Name, price, and category are required fields.' });
+  }
+
+  const product = new Product({ name, price, category, description, image });
+
+  try {
+    const newProduct = await product.save();
+    res.status(201).json(newProduct);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+
+
+app.get('/api/products', async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.get('/api/products/:id', async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
