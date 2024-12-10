@@ -65,3 +65,26 @@ app.get('/api/products/:id', async (req, res) => {
   }
 });
 
+
+app.put('/api/products/:id', async (req, res) => {
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedProduct) return res.status(404).json({ message: 'Product not found' });
+    res.json(updatedProduct);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+
+app.delete('/api/products/:id', async (req, res) => {
+  try {
+    await Product.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Product deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(`PORT, () => console.log(Server running on port ${PORT})`);
