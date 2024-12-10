@@ -9,7 +9,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     axios
-      get(`http://localhost:5000/api/products/${id}`)
+      .get(`http://localhost:5000/api/products/${id}`)
       .then((response) => setProduct(response.data))
       .catch((err) => console.error(err));
   }, [id]);
